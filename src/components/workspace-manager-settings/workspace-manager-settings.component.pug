@@ -1,0 +1,77 @@
+.d-flex.w-100.justify-content-between.mb-3
+    .h3.header Workspace manager
+    .d-flex.justify-content-end.align-items-top
+        .mr-2 Run at startup
+        toggle(
+            [(ngModel)]='config.store.workspaceManager.runOnStartup',
+            (ngModelChange)='config.save()',
+        )
+        select.form-control.form-control-sm.select.ml-2(
+            [(ngModel)]='config.store.workspaceManager.defaultWorkspaceProfile',
+            (ngModelChange)='config.save()',
+        )
+            option(
+                *ngFor='let profile of profiles; let i = index',
+                [ngValue]='i'
+            ) {{profile.name}}
+
+.row.content
+    .col-12.col-md-6
+        .d-flex.mb-3.mt-4
+            .input-group
+                .input-group-prepend
+                    .input-group-text
+                        i.fas.fa-fw.fa-search
+                input.form-control(
+                    type='search',
+                    [(ngModel)]='workspaceProfileFilter'
+                    )
+
+            button.btn.btn-primary.flex-shrink-0.ml-3((click)='newProfile()')
+                i.fas.fa-fw.fa-plus
+                | New profile
+        .list-group-light.mb-3
+            ng-container(*ngFor='let profile of profiles; let i = index')
+                div.w-100.mb-3.rounded.tab.list-group-item.list-group-item-action(
+                        *ngIf='!workspaceProfileFilter || workspaceProfileFilterFn(profile)',
+                        (click)='selectProfile(profile, i)'
+                    )
+                    div 
+                        div.tab-header {{ profile.name }}
+                        div.tab-description  Tabs: {{ profile.tabs ? profile.tabs.length : 0 }}
+                    div
+                        button.btn.btn-link.ml-1((click)='$event.stopPropagation(); runProfile(profile)')
+                            i.fas.fa-play
+                        button.btn.btn-link.ml-1((click)='$event.stopPropagation(); deleteProfile(i)')
+                            i.fas.fa-trash
+    .col-md-6.d-flex.flex-column.h-100
+        .d-flex.mb-3.mt-4
+            .input-group
+                .input-group-prepend
+                    .input-group-text
+                        i.fas.fa-fw.fa-bookmark
+                input.form-control(
+                    [(ngModel)]='selectedProfile.name',
+                    type='text'
+                )
+
+            button.btn.btn-primary.flex-shrink-0.ml-3(
+                [disabled]="selectedProfile.index === undefined || !selectedProfile.name",
+                (click)="saveSelectedProfile()"
+                )
+                i.fas.fa-fw.fa-save
+                | Save
+        textarea.form-control.w-100.mb-3(
+            [(ngModel)]='selectedProfile.profile'
+        )
+
+        .d-flex.w-100.justify-content-end.mb-3
+            button.btn.btn-secondary.flex-shrink-0.ml-3.d-flex.justify-content-center(
+                [disabled]="selectedProfile.index === undefined",
+                (click)='loadExampleConfig()'
+                )
+                    i.far.fa-fw.far.fa-file-code.pr-1
+                    | Load example
+            button.btn.btn-secondary.flex-shrink-0.ml-3.d-flex.justify-content-center((click)='openWorkspaceConfigFile()')
+                    i.fas.fa-fw.fa-external-link-alt.pr-1
+                    | Open config file

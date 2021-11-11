@@ -1,0 +1,48 @@
+:host {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    height: 100%;
+
+    > .header {
+        height: 5%;
+    }
+
+    > .content {
+        height: 95%;
+    }
+}
+
+textarea {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+    flex: 1;
+}
+
+.tab {
+    height: 50px;
+    padding: 10px 20px;
+    border-radius: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .tab-header {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .tab-description {
+        font-size: 0.8rem;
+        font-weight: 300;
+    }
+}
+
+.select {
+    height: 25px !important;
+    width: 100px !important;
+    font-size: 12px;
+    line-height: -5px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}

@@ -1,0 +1,6 @@
+.modal-body
+    input.form-control(type='text', #input, [(ngModel)]='name', (keyup.enter)='save()', autofocus)
+
+.modal-footer
+    button.btn.btn-primary((click)='save()') Save
+    button.btn.btn-secondary((click)='close()') Cancel
