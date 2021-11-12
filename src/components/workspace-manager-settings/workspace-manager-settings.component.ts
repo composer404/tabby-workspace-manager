@@ -24,7 +24,12 @@ export class WorkspaceManagerSettingsComponent {
         private readonly toastr: ToastrService,
         private ngbModal: NgbModal,
     ) {
-        this.profiles = this.workspaceService.loadWorkspaceProfiles();
+        const loadedProfiles = this.workspaceService.loadWorkspaceProfiles();
+        if (!loadedProfiles) {
+            this.profiles = [];
+            return;
+        }
+        this.profiles = loadedProfiles;
     }
 
     selectProfile(profile: WorkspaceProfile, index: number): void {
