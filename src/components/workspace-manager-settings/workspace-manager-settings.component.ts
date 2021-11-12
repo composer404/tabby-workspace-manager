@@ -2,10 +2,11 @@ import * as yaml from 'js-yaml';
 
 import { Component } from '@angular/core';
 import { ConfigService } from 'tabby-core';
+import { NewWorkspaceProfileModalComponent } from '../new-workspace-profile-modal/new-workspace-profile-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { WorkspaceManagerService } from '../../services/workspace-manager.service';
 import { WorkspaceProfile } from '../../interfaces/interfaces';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NewWorkspaceProfileModalComponent } from '../new-workspace-profile-modal/new-workspace-profile-modal.component';
 
 @Component({
     template: require('./workspace-manager-settings.component.pug'),
@@ -20,6 +21,7 @@ export class WorkspaceManagerSettingsComponent {
     constructor(
         public config: ConfigService,
         private workspaceService: WorkspaceManagerService,
+        private readonly toastr: ToastrService,
         private ngbModal: NgbModal,
     ) {
         this.profiles = this.workspaceService.loadWorkspaceProfiles();
@@ -46,10 +48,23 @@ export class WorkspaceManagerSettingsComponent {
         this.workspaceService.saveWorkspaceProfiles(this.profiles);
     }
 
+    onTextareaKeyDown(event: KeyboardEvent): void {
+        if (this.selectedProfile.index !== undefined && event.ctrlKey && event.key === `s`) {
+            this.saveSelectedProfile();
+        }
+    }
+
     saveSelectedProfile(): void {
         this.profiles[this.selectedProfile.index].name = this.selectedProfile.name;
-        this.profiles[this.selectedProfile.index].tabs = yaml.load(this.selectedProfile.profile) as any;
-        this.workspaceService.saveWorkspaceProfiles(this.profiles);
+        try {
+            const content = yaml.load(this.selectedProfile.profile) as any;
+            this.profiles[this.selectedProfile.index].tabs = content;
+            this.workspaceService.saveWorkspaceProfiles(this.profiles);
+            this.toastr.info(`Workspace config has been
+       successfully saved`);
+        } catch {
+            this.toastr.error(`Workspace config has invalid format`);
+        }
     }
 
     loadExampleConfig(): void {

@@ -36,7 +36,7 @@
                         *ngIf='!workspaceProfileFilter || workspaceProfileFilterFn(profile)',
                         (click)='selectProfile(profile, i)'
                     )
-                    div 
+                    div
                         div.tab-header {{ profile.name }}
                         div.tab-description  Tabs: {{ profile.tabs ? profile.tabs.length : 0 }}
                     div
@@ -52,6 +52,7 @@
                         i.fas.fa-fw.fa-bookmark
                 input.form-control(
                     [(ngModel)]='selectedProfile.name',
+                    (keydown)="onTextareaKeyDown($event)",
                     type='text'
                 )
 
@@ -62,7 +63,8 @@
                 i.fas.fa-fw.fa-save
                 | Save
         textarea.form-control.w-100.mb-3(
-            [(ngModel)]='selectedProfile.profile'
+            [(ngModel)]='selectedProfile.profile',
+            (keydown)="onTextareaKeyDown($event)"
         )
 
         .d-flex.w-100.justify-content-end.mb-3
