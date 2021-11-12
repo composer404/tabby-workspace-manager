@@ -74,7 +74,7 @@ export class WorkspaceManagerSettingsComponent {
                 {
                     title: `Example Title 1`,
                     color: `#03fccf`,
-                    profile: 0,
+                    profile: `CMD (clink)`,
                     commands: [`ls`, `cd ..`],
                 },
                 {

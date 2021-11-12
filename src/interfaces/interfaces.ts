@@ -6,7 +6,7 @@ export interface WorkspaceProfile {
 export interface TabConfig {
     title?: string;
     color?: string;
-    profile?: number;
+    profile?: string;
     commands?: string[];
 }
 

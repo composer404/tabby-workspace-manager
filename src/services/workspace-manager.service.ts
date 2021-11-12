@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HotkeysService } from 'tabby-core';
-import { BaseTerminalTabComponent } from 'tabby-terminal';
-import { ToastrService } from 'ngx-toastr';
-import { ConfigService } from 'tabby-core';
 import { HOT_KEYS, TabConfig, WorkspaceProfile } from '../interfaces/interfaces';
-import { ProfilesService, PlatformService } from 'tabby-core';
+import { PartialProfile, PlatformService, Profile, ProfilesService } from 'tabby-core';
+import { getWorkspaceConfigPath, loadWorkspaceConfig, saveWorkspaceConfig } from '../workspace-config';
+
+import { BaseTerminalTabComponent } from 'tabby-terminal';
+import { ConfigService } from 'tabby-core';
 import { ElectronService } from 'tabby-electron';
-import { loadWorkspaceConfig, saveWorkspaceConfig, getWorkspaceConfigPath } from '../workspace-config';
+import { HotkeysService } from 'tabby-core';
+import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({ providedIn: 'root' })
 export class WorkspaceManagerService {
@@ -75,28 +76,50 @@ export class WorkspaceManagerService {
         if (config) {
             const profiles = await this.profileService.getProfiles();
             for (const element of config) {
+                const selectedProfile = this.findTerminalProfile(profiles, element);
                 const tab = (await this.profileService.openNewTabForProfile(
-                    profiles[element.profile || 0],
+                    selectedProfile,
                 )) as BaseTerminalTabComponent;
+
                 const subscription = tab.activity$.subscribe(() => {
                     setTimeout(() => {
-                        if (element.commands) {
-                            for (const command of element.commands) {
-                                tab.session.write(Buffer.from(`${command}\r`));
-                            }
-                        }
-
-                        if (element.title) {
-                            tab.setTitle(element.title);
-                            tab.customTitle = element.title;
-                        }
-
-                        if (element.color) {
-                            tab.parent.color = element.color;
-                        }
+                        this.customizeTab(tab, element);
                         subscription.unsubscribe();
                     }, 50);
                 });
+            }
+        }
+    }
+
+    private findTerminalProfile(profiles: PartialProfile<Profile>[], element: TabConfig): PartialProfile<Profile> {
+        if (element.profile) {
+            let selectedProfile: PartialProfile<Profile>;
+            for (const profile of profiles) {
+                if (profile.name.toLowerCase().includes(element.profile.toString().toLowerCase())) {
+                    selectedProfile = profile;
+                }
+            }
+            if (!selectedProfile) {
+                this.toastr.error(`Could not find ${element.profile}`);
+                return profiles[0];
+            }
+
+            return selectedProfile;
+        }
+        return profiles[0];
+    }
+
+    private customizeTab(tab: BaseTerminalTabComponent, element: TabConfig): void {
+        if (element.title) {
+            tab.setTitle(element.title);
+            tab.customTitle = element.title;
+        }
+        if (element.color) {
+            tab.parent.color = element.color;
+        }
+        if (element.commands) {
+            for (const command of element.commands) {
+                tab.session.write(Buffer.from(`${command}\r`));
             }
         }
     }
