@@ -3,7 +3,6 @@
 <p>
     A <a href="https://tabby.sh/">Tabby</a> plugin that allows you to create multiple workspace profiles. Each profile has its own .yaml config in which you can customize the workspace. Additionally, it is possible to select a workspace profile that will be run at the terminal startup and setting hotkeys for first five profiles.
 </p>
-<br>
 
 ## Table of contents
 
@@ -11,13 +10,9 @@
 -   [General](#general)
 -   [Example worksapce config](#example-workspace-config)
 
-<br>
-
 ## Getting Started
 
 `Last release of a plugin is available directly in Tabby's plugin tab`
-
-<br>
 
 ## General
 
@@ -37,9 +32,7 @@ The plugin adds a new tab in Tabby's settings. It is possible to add, delete and
         <li> List of commands after tab is open </li>
     </ul>
     </i>
-
-<span style="font-size: 12px;">\*all the attributes are optional</span>
-
+    <span style="font-size: 12px;">*all the attributes are optional</span>
 </p>
 
 <br>
@@ -59,5 +52,3 @@ The plugin adds a new tab in Tabby's settings. It is possible to add, delete and
     - title: Example Title 3
       color: '#302a57'
 ```
-
-</p>
