@@ -95,7 +95,7 @@ export class WorkspaceManagerService {
         if (element.profile) {
             let selectedProfile: PartialProfile<Profile>;
             for (const profile of profiles) {
-                if (profile.name.toLowerCase().includes(element.profile.toString().toLowerCase())) {
+                if (profile.name.toLowerCase() === element.profile.toString().toLowerCase()) {
                     selectedProfile = profile;
                 }
             }
@@ -103,7 +103,6 @@ export class WorkspaceManagerService {
                 this.toastr.error(`Could not find ${element.profile}`);
                 return profiles[0];
             }
-
             return selectedProfile;
         }
         return profiles[0];
