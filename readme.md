@@ -8,7 +8,7 @@
 
 -   [Getting Started](#getting-started)
 -   [General](#general)
--   [Example worksapce config](#example-workspace-config)
+-   [Example workspace config](#example-workspace-config)
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ The plugin adds a new tab in Tabby's settings. It is possible to add, delete and
     <ul>
         <li> Title </li>
         <li> Color </li>
-        <li> Profile (by default selected the first avaliable one) </li>
+        <li> Profile (by default selected the first available one) </li>
         <li> List of commands after tab is open </li>
     </ul>
     </i>
